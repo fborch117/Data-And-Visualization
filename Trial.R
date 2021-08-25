@@ -70,7 +70,6 @@ CountyClassifications<-data.frame()
 csv_rowdata<-CountyClassifications.csv[1:1,1]
 csv_rownames<-scan(text=csv_rowdata,what='',sep='\t')
 csv_row<-as.data.frame(do.call(cbind,as.list(csv_rownames)))
-colnames(csv_row)<-colnames(CountyClassifications)
 
 ## For loop that iterates through each of the 3225 rows. It selects the text from each row, separates it into
 ## individual parts, turns it into a data frame, and then binds it to an originally empty data frame row by row. 

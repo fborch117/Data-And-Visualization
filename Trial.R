@@ -2,7 +2,8 @@
 #Name: Foster Borch Date: 8/25/2021
 
 ##First setting my working directory just in case I have to go access other files saved here in the future.
-##Additionally installing and loading packages.
+##Additionally installing and loading packages. ##There are a few instances where I use file paths specific
+##to my desktop file hierarchy. You will have to change these. There are 10 instances where I use specific file paths. 
 
 setwd('N:/R/Work/RISI/risi_analyst_exercise')
 

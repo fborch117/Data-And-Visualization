@@ -1,4 +1,3 @@
-#RISI Pre-Interview Assessment 
 #Name: Foster Borch Date: 8/25/2021
 
 ##First setting my working directory just in case I have to go access other files saved here in the future.

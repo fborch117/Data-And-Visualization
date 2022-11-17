@@ -9,6 +9,6 @@ I relish any opportunity to take seemingly meaningless data and create visualiza
 power in geospatial analysis software, and it's something I use in my professional and personal life. 
 
 This repository acts as a location to organize my visualizations. Some of these products have errors. Some I am proud of.
-I relish the opportunity to discuss my work. I enjoy nothing more than criticism, feedback, and the ability to improve my craft.
+I enjoy nothing more than criticism, feedback, and the ability to improve my craft.
 
 I hope you enjoy!

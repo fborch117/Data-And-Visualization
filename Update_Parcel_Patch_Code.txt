@@ -1,0 +1,158 @@
+ClearCollect(
+    negData,
+    'Negotiations Dashboard Data'
+); //Updating the negData collection since new data has been added
+
+Patch( //Used to update a record in the 'Negotiations Dashboard Data' Sharepoint List
+    'Negotiations Dashboard Data',
+        LookUp(
+            negData,
+            'Parcel #'=varPar && Title=varPIN
+        ), //Used to find the record that will be updated. Matched pin and parcel number. 
+    { //The following values are the column data that will be patched. These are filled with user information from the forms
+    'Negotiator Alias':ddFirstAssignee_5.SelectedText.'Negotiations or Admin Staff Alias',//Alias of the Negotiator
+    Negotiator:
+                LookUp(
+                    negStaff,
+                    Lower(
+                        Trim('Negotiations or Admin Staff Name'.Email
+                        )
+                    )
+                    =
+                    Lower(
+                        Trim(
+                            ddFirstAssignee_5.Selected.'Negotiations or Admin Staff Name'.Email
+                        )
+                    ),
+                    'Negotiations or Admin Staff Name'
+                ),
+    'Minor Alterations Hearing Scheduled?':ToggleHearingScheduled_8.Value,
+    'Minor Alterations Site Visit Date':DateValue(SiteVisitDateValue_8),
+    'Minor Alterations Hearing Date':DateValue(HearingDateValue_7),
+    'Valuation Completed Date':DateValue(DataCardValue8_3),
+    'Waiver or Appraisal':WaiverorAppraisalValue1_3.Selected,
+    'Initial Offer Amount':Value(InitialOfferAmountValue_3.Text),
+    'Signed Option?':ToggleSignedOption_5.Value,
+    'Signed Option Date':DateValue(SignedOptionDateValue_3),
+    'Check and Deed Requested?':ToggleCheckDeed_3.Value,
+    'Status Update Comments':StatusUpdateText_2.Text,
+    '2nd Offer Needed?':Toggle2ndOffer_3.Value,
+    '2nd Offer Amount':Value(SecondOfferAmountValue_3.Text),
+    '3rd Offer Needed?':Toggle3rdOffer_3.Value,
+    '3rd Offer Amount':Value(ThirdOfferAmountValue_3.Text),
+    'End of Negotiations Letter Needed?':ToggleEoN_3.Value,
+    'Escalation to Complaint Letter Needed?':ToggleEoC_3.Value,
+    'Initial Offer Mailed Date':DateValue(InitialMailedDateValue_2),
+    'Initial Offer Delivery Confirmation Date':DateValue(DeliveryConfirmationDateValue_2),
+    'Check and Deed Requested Date':DateValue(CheckandDeedDateValue_2),
+    'Payment Amount':Value(PaymentAmountValue_2.Text),
+    'Settlement Type':WaiverorAppraisalValue2_1.Selected,
+    'Deed Mailed?':ToggleDeedMailed_2.Value,
+    'Deed Mailed Date':DateValue(DeedMailedDateValue_2),
+    'Parcel Completed Date':DateValue(ParcelCompletedDateValue_2),
+    'Deed Sent for Recording?':ToggleDeedRecording_2.Value,
+    'Deed Sent for Recording Date':DateValue(DeedRecordingDateValue_3),
+    'Recording Data (Book/Page)':RecordingDataValue_2.Text,
+    'Deed Recording Date':DateValue(DeedRecordingDateValue_4),
+    '2nd Offer Mailed Date':DateValue(SecondOfferMailedDateValue_2),
+    '2nd Offer Delivery Confirmation Date':DateValue(SecondOfferDeliveryDateValue_2),
+    '3rd Offer Mailed Date':DateValue(ThirdOfferMailedDateValue_2),
+    '3rd Offer Delivery Confirmation Date':DateValue(ThirdOfferDeliveryConfirmationDateValue_2),
+    'End of Negotiations Letter Mailed Date':DateValue(EoNLetterMailedDateValue_2),
+    'End of Negotiations Letter Delivery Confirmation Date':DateValue(EoNLetterDeliveryDateValue_2),
+    'Escalation to Complaint Letter Mailed Date':DateValue(EoCLetterMailDateValue_2),
+    'Delivery Confirmation for Escalation to Complaint Letter Date':DateValue(EoCDeliveryDateValue_2)
+    },
+    formFirstAttach_4.Updates //Separate form used for attachments. Was not patching to list when in the same form. 
+);
+
+If(
+    ddFirstAssignee_5.Selected.'Negotiations or Admin Staff Alias'=
+    LookUp(
+        negData,
+        'Parcel #'=varPar && Title=varPIN,
+        'Negotiator Alias'
+    ),
+    Office365Outlook.SendEmailV2(
+            emailVar,
+            "Negotiations Information Updated - " & "Parcel: " & varPar & " | " & LookUp(ProjectMasterRenameTitle,PIN=varPIN,'Project Name & Number') & " PIN: " & varPIN,
+            ddFirstAssignee_5.Selected.'Negotiations or Admin Staff Alias' & ",<br><br>" & "The following parcel information has been updated.<br><br>" & "Parcel: " & varPar & "<br><br>PO Alias: " &  valFirstPOAlias_5.Text & "<br><br>Project: " & LookUp(ProjectMasterRenameTitle,PIN=varPIN,'Project Name & Number') & "<br><br>" & " PIN: " & varPIN & "<br><br>" & "Current 090.03 EF Date: " & LookUp(currentDates,Title=varPIN,'Expected Finish-.090.03') & ".<br><br>" & "Assignment Notes: " & valAssignmentNotes.Text, 
+            {
+                Importance: "Normal",
+                Attachments:ForAll(
+                    valFirstAttach_3.Attachments,
+                        {
+                            Name:ThisRecord.Name,
+                            ContentBytes: ThisRecord.Value,   
+                            '@odata.type': ""
+                        }
+                )
+            }
+    ),
+    Office365Outlook.SendEmailV2(
+            emailVar,
+            "New Negotiations Assignment - " & "Parcel: " & varPar & " | " & LookUp(ProjectMasterRenameTitle,PIN=varPIN,'Project Name & Number') & " PIN: " & varPIN,
+            ddFirstAssignee_5.Selected.'Negotiations or Admin Staff Alias' & ",<br><br>" & "The following parcel has been re-assigned to you.<br><br>" & "Parcel: " & varPar & "<br><br>PO Alias: " &  valFirstPOAlias_5.Text & "<br><br>Project: " & LookUp(ProjectMasterRenameTitle,PIN=varPIN,'Project Name & Number') & "<br><br>" & " PIN: " & varPIN & "<br><br>" & "Current 090.03 EF Date: " & LookUp(currentDates,Title=varPIN,'Expected Finish-.090.03') & ".<br><br>" & "Please set up a meeting with " & valFirstPM_4.Text & " and the P&T Agent to discuss the project and its impacts. Include me on that meeting if the schedule allows." & ".<br><br>" & "Assignment Notes: " & valAssignmentNotes.Text, 
+            {
+                Importance: "Normal",
+                Attachments:ForAll(
+                    valFirstAttach_3.Attachments,
+                        {
+                            Name:ThisRecord.Name,
+                            ContentBytes: ThisRecord.Value,   
+                            '@odata.type': ""
+                        }
+                )
+            }
+    )
+);
+
+//Reset forms so that everything will be clear upon next use.    
+ Concurrent(
+
+    ResetForm(
+        formFirstParcelInfo_5
+    ),
+    ResetForm(
+        formProjectInfo_3
+    ),
+    ResetForm(
+        formFirstAttach_4
+    ),//Reset forms so that everything will be clear upon next use.
+
+    Set(
+        varPIN,
+        Blank(
+
+        )
+    ), //Resetting saved Project PIN variable so that it won't conflict with uses elsewhere in the app
+
+    Set(
+        varPar,
+        Blank(
+
+        )
+    ), //Resetting saved Parcel number variable so that it won't conflict with uses elsewhere in the app
+
+    Set(
+        varChoose,
+        true
+    ), //Resetting visibility property of * next to Assign Negotiator box. 
+
+    Set(
+        accountVar,
+        Blank(
+        )
+    ), //Resetting Negotiator/Admin account variable so that it won't conflict with uses elsewhere in the app. Especially important when patching negotiator information. 
+
+    Set(
+        emailVar,
+        Blank(
+        )
+    ) //Resetting Negotiator/Admin email variable so that it won't conflict with uses elsewhere in the app. Especially important when patching negotiator information. 
+);
+
+
+Navigate(
+    ProjectParcelUpdateSelectionScreen
+);

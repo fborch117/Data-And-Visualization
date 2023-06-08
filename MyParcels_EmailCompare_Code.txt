@@ -1,0 +1,82 @@
+Set(
+    ParVis,
+    false
+);
+
+Set(
+    varPIN,
+    Blank(
+
+    )
+);
+
+Concurrent(
+    ClearCollect(
+        ParcelsinDocs,
+        'Parcels in Documents'
+    ),
+    ClearCollect(
+        negData,
+        'Negotiations Dashboard Data'
+    )
+);
+
+ClearCollect(
+    MyParcels,
+    Filter(
+        negData,
+        Lower(
+            Trim(
+                Negotiator.Email
+            )
+        )=
+        LookUp(
+            negStaff,
+            Lower(
+                Trim(
+                    'Negotiations or Admin Staff Name'.Email
+                )
+            )
+            =
+            Lower(
+                Trim(
+                    User().Email
+                )
+            ),
+            Lower(
+                Trim('Negotiations or Admin Staff Name'.Email
+                )
+            )
+        )
+    )
+); //Filters parcels based on the negotiator emails associated with assigned parcels. Compares to emails in negstaff sharepoint. Lower() and Trim() used in case of case sensitivity and spaces. 
+
+
+ClearCollect(
+    MyProjectParcels,
+    Filter(
+        MyParcels,
+        Title=varPIN
+    )
+);
+
+ClearCollect(
+    ProjectsinDocs,
+        Filter(
+            ProjectMasterRenameTitle,
+            PIN in ParcelsinDocs.PIN
+        )
+);
+
+ClearCollect(
+    MyProjects,
+    Filter(
+        ProjectsinDocs,
+        PIN in MyParcels.Title
+    )
+);
+
+Set(
+    ParVis,
+    true
+);

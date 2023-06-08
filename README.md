@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Hello there! My name is Foster Borch, and I am currently working as a Right of Way Agent with the State of Vermont's Agency of Transportation. In my role, I extensively utilize CAD and GIS software to analyze and visualize data.
+Hello there! My name is Foster Borch, and I am currently working as a Right of Way Agent with the State of Vermont's Agency of Transportation. In my role, I extensively utilize Power Apps/BI, CAD, and GIS software to analyze and visualize data.
 
-I am a skilled PowerApps developer and experienced data analyst proficient in R, SAS, and Python. I relish any opportunity to take seemingly meaningless data and create visualizations from the noise. I see the incredible power in geospatial analysis software, and it's something I use in my professional and personal life.
+I am a skilled PowerApps developer and experienced data analyst proficient in R, SAS, HTML, and Python. I relish any opportunity to take seemingly meaningless data and create visualizations from the noise. I see the incredible power in geospatial analysis software, and it's something I use in my professional and personal life.
 
 ## Repository Purpose
 
-This repository serves as a central location for organizing and sharing my visualizations. Here, you will find a collection of my work, ranging from CAD and GIS visualizations to data analyses using R, SAS, and Python. 
+This repository serves as a central location for organizing and sharing my visualizations. Here, you will find a collection of my work, ranging from CAD and GIS visualizations to data analyses using HTML, R, SAS, and Python. 
 
 ## Feedback and Collaboration
 
